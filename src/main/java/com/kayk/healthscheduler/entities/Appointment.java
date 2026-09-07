@@ -25,6 +25,10 @@ public class Appointment implements Serializable {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
     public Appointment(){}
 
     public Appointment(Long id, Instant moment, AppointmentStatus status, String notes) {
@@ -72,6 +76,14 @@ public class Appointment implements Serializable {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     @Override

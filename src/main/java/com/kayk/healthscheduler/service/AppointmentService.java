@@ -2,8 +2,10 @@ package com.kayk.healthscheduler.service;
 
 import com.kayk.healthscheduler.DTO.AppointmentDTO;
 import com.kayk.healthscheduler.entities.Appointment;
+import com.kayk.healthscheduler.entities.Doctor;
 import com.kayk.healthscheduler.entities.Patient;
 import com.kayk.healthscheduler.repository.AppointmentRepository;
+import com.kayk.healthscheduler.repository.DoctorRepository;
 import com.kayk.healthscheduler.repository.PatientRepository;
 import com.kayk.healthscheduler.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +23,9 @@ public class AppointmentService {
     @Autowired
     private PatientRepository patientRepository;
 
+    @Autowired
+    private DoctorRepository doctorRepository;
+
     @Transactional
     public AppointmentDTO insert(AppointmentDTO dto) {
         Appointment appointment = new Appointment();
@@ -30,6 +35,10 @@ public class AppointmentService {
 
         Patient patient = patientRepository.getReferenceById(appointment.getPatient().getId());
         appointment.setPatient(patient);
+
+        Doctor doctor = doctorRepository.getReferenceById(appointment.getDoctor().getId());
+        appointment.setDoctor(doctor);
+
         appointmentRepository.save(appointment);
         return new AppointmentDTO(appointment);
     }

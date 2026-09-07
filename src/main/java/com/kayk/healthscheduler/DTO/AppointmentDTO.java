@@ -12,10 +12,11 @@ public record AppointmentDTO(
         Instant moment,
         AppointmentStatus status,
         String notes,
-        PatientDTO patient
+        PatientDTO patient,
+        DoctorDTO doctor
 ) {
     public AppointmentDTO(Appointment entity) {
-        this(entity.getId(), entity.getMoment(), entity.getStatus(), entity.getNotes(), entity.getPatient() != null ? new PatientDTO(entity.getPatient()) : null);
+        this(entity.getId(), entity.getMoment(), entity.getStatus(), entity.getNotes(), entity.getPatient() != null ? new PatientDTO(entity.getPatient()) : null, entity.getDoctor() != null ? new DoctorDTO(entity.getDoctor()) : null);
     }
 
 }
