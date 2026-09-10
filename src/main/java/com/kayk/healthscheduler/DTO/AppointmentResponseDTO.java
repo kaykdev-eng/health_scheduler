@@ -6,17 +6,17 @@ import com.kayk.healthscheduler.entities.enums.AppointmentStatus;
 
 import java.time.Instant;
 
-public record AppointmentDTO(
+public record AppointmentResponseDTO(
         Long id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
         Instant moment,
         AppointmentStatus status,
         String notes,
-        PatientDTO patient,
-        DoctorDTO doctor
+        PatientResponseDTO patient,
+        DoctorResponseDTO doctor
 ) {
-    public AppointmentDTO(Appointment entity) {
-        this(entity.getId(), entity.getMoment(), entity.getStatus(), entity.getNotes(), entity.getPatient() != null ? new PatientDTO(entity.getPatient()) : null, entity.getDoctor() != null ? new DoctorDTO(entity.getDoctor()) : null);
+    public AppointmentResponseDTO(Appointment entity) {
+        this(entity.getId(), entity.getMoment(), entity.getStatus(), entity.getNotes(), entity.getPatient() != null ? new PatientResponseDTO(entity.getPatient()) : null, entity.getDoctor().getId() != null ? new DoctorResponseDTO(entity.getDoctor()) : null);
     }
 
 }

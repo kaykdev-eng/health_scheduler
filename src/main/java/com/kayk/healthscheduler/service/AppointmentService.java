@@ -1,15 +1,19 @@
 package com.kayk.healthscheduler.service;
 
-import com.kayk.healthscheduler.DTO.AppointmentDTO;
+import com.kayk.healthscheduler.DTO.AppointmentResponseDTO;
+import com.kayk.healthscheduler.DTO.AppointmentRequestDTO;
 import com.kayk.healthscheduler.entities.Appointment;
 import com.kayk.healthscheduler.entities.Doctor;
 import com.kayk.healthscheduler.entities.Patient;
+import com.kayk.healthscheduler.mapper.AppointmentMapper;
 import com.kayk.healthscheduler.repository.AppointmentRepository;
 import com.kayk.healthscheduler.repository.DoctorRepository;
 import com.kayk.healthscheduler.repository.PatientRepository;
+import com.kayk.healthscheduler.controller.exceptions.BusinessException;
 import com.kayk.healthscheduler.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,32 +30,37 @@ public class AppointmentService {
     @Autowired
     private DoctorRepository doctorRepository;
 
-    @Transactional
-    public AppointmentDTO insert(AppointmentDTO dto) {
-        Appointment appointment = new Appointment();
-        appointment.setMoment(dto.moment());
-        appointment.setStatus(dto.status());
-        appointment.setNotes(dto.notes());
+    @Autowired
+    private AppointmentMapper appointmentMapper;
 
-        Patient patient = patientRepository.getReferenceById(appointment.getPatient().getId());
+    @Transactional
+    public AppointmentResponseDTO insert(AppointmentRequestDTO dto) {
+        Appointment appointment = appointmentMapper.toEntity(dto);
+
+        Patient patient = patientRepository.getReferenceById(dto.patientId());
         appointment.setPatient(patient);
 
-        Doctor doctor = doctorRepository.getReferenceById(appointment.getDoctor().getId());
+        Doctor doctor = doctorRepository.getReferenceById(dto.doctorId());
         appointment.setDoctor(doctor);
 
+        boolean hasScheduleConflict = appointmentRepository.existsByDoctorIdAndMoment(doctor.getId(), appointment.getMoment());
+        if(hasScheduleConflict) {
+            throw new BusinessException("The doctor already has an appointment scheduled for the same time.", HttpStatus.CONFLICT, "APPOINTMENT_ALREADY_EXISTS");
+        }
+
         appointmentRepository.save(appointment);
-        return new AppointmentDTO(appointment);
+        return new AppointmentResponseDTO(appointment);
     }
 
     @Transactional(readOnly = true)
-    public AppointmentDTO findById(Long id) {
+    public AppointmentResponseDTO findById(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        return new AppointmentDTO(appointment);
+        return new AppointmentResponseDTO(appointment);
     }
 
     @Transactional(readOnly = true)
-    public List<AppointmentDTO> findAll() {
-        List<AppointmentDTO> allPatients = appointmentRepository.findAll().stream().map(AppointmentDTO::new).toList();
+    public List<AppointmentResponseDTO> findAll() {
+        List<AppointmentResponseDTO> allPatients = appointmentRepository.findAll().stream().map(AppointmentResponseDTO::new).toList();
         return allPatients;
     }
 
@@ -61,20 +70,25 @@ public class AppointmentService {
     }
 
     @Transactional
-    public AppointmentDTO update(Long id, AppointmentDTO obj) {
+    public AppointmentResponseDTO update(Long id, AppointmentRequestDTO obj) {
         try {
             Appointment appointment = appointmentRepository.getReferenceById(id);
-            updateData(appointment, obj);
+            appointmentMapper.updateFromDto(obj, appointment);
+
+            if(obj.patientId() != null ) {
+                Patient patient = patientRepository.getReferenceById(obj.id());
+                appointment.setPatient(patient);
+            }
+
+            if(obj.doctorId() != null ) {
+                Doctor doctor = doctorRepository.getReferenceById(obj.id());
+                appointment.setDoctor(doctor);
+            }
+
             appointmentRepository.save(appointment);
-            return new AppointmentDTO(appointment);
+            return new AppointmentResponseDTO(appointment);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
-    }
-
-    public void updateData(Appointment entity, AppointmentDTO appointmentDTO) {
-        entity.setMoment(appointmentDTO.moment());
-        entity.setStatus(appointmentDTO.status());
-        entity.setNotes(appointmentDTO.notes());
     }
 }

@@ -1,10 +1,8 @@
 package com.kayk.healthscheduler.controller;
 
-import com.kayk.healthscheduler.DTO.AppointmentDTO;
-import com.kayk.healthscheduler.DTO.PatientDTO;
+import com.kayk.healthscheduler.DTO.AppointmentRequestDTO;
+import com.kayk.healthscheduler.DTO.AppointmentResponseDTO;
 import com.kayk.healthscheduler.service.AppointmentService;
-import com.kayk.healthscheduler.service.PatientService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +18,28 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @GetMapping
-    public ResponseEntity<List<AppointmentDTO>> findAll() {
-        List<AppointmentDTO> appointmentDTOS = appointmentService.findAll();
+    public ResponseEntity<List<AppointmentResponseDTO>> findAll() {
+        List<AppointmentResponseDTO> appointmentDTOS = appointmentService.findAll();
         return ResponseEntity.ok().body(appointmentDTOS);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
-        AppointmentDTO appointmentDTO = appointmentService.findById(id);
-        return ResponseEntity.ok().body(appointmentDTO);
+    public ResponseEntity<AppointmentResponseDTO> findById(@PathVariable Long id) {
+        AppointmentResponseDTO appointmentResponseDTO = appointmentService.findById(id);
+        return ResponseEntity.ok().body(appointmentResponseDTO);
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentDTO> insert(@RequestBody AppointmentDTO entity) {
-        AppointmentDTO appointmentDTO = appointmentService.insert(entity);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(appointmentDTO.id()).toUri();
-        return ResponseEntity.created(uri).body(appointmentDTO);
+    public ResponseEntity<AppointmentResponseDTO> insert(@RequestBody AppointmentRequestDTO entity) {
+        AppointmentResponseDTO appointmentResponseDTO = appointmentService.insert(entity);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(appointmentResponseDTO.id()).toUri();
+        return ResponseEntity.created(uri).body(appointmentResponseDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<AppointmentDTO> update(@PathVariable Long id, @RequestBody AppointmentDTO entity) {
-        AppointmentDTO appointmentDTO = appointmentService.update(id, entity);
-        return ResponseEntity.ok().body(appointmentDTO);
+    public ResponseEntity<AppointmentResponseDTO> update(@PathVariable Long id, @RequestBody AppointmentRequestDTO entity) {
+        AppointmentResponseDTO appointmentResponseDTO = appointmentService.update(id, entity);
+        return ResponseEntity.ok().body(appointmentResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")

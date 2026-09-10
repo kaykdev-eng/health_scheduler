@@ -1,11 +1,15 @@
 package com.kayk.healthscheduler.service;
 
-import com.kayk.healthscheduler.DTO.PatientDTO;
+import com.kayk.healthscheduler.DTO.PatientRequestDTO;
+import com.kayk.healthscheduler.DTO.PatientResponseDTO;
 import com.kayk.healthscheduler.entities.Patient;
+import com.kayk.healthscheduler.mapper.PatientMapper;
 import com.kayk.healthscheduler.repository.PatientRepository;
+import com.kayk.healthscheduler.controller.exceptions.BusinessException;
 import com.kayk.healthscheduler.service.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,25 +20,29 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
+    @Autowired
+    private PatientMapper patientMapper;
+
     @Transactional
-    public PatientDTO insert(PatientDTO dto) {
-        Patient patient = new Patient();
-        patient.setName(dto.name());
-        patient.setEmail(dto.email());
-        patient.setPhone(dto.phone());
+    public PatientResponseDTO insert(PatientRequestDTO dto) {
+        Patient patient = patientMapper.toEntity(dto);
+        boolean existsEmail = patientRepository.existsByPhoneOrEmail(patient.getPhone(), patient.getEmail());
+        if(existsEmail) {
+            throw new BusinessException("Data already exists in the database", HttpStatus.CONFLICT, "DATA_ALREADY_EXISTS");
+        }
         patientRepository.save(patient);
-        return new PatientDTO(patient);
+        return new PatientResponseDTO(patient);
     }
 
     @Transactional(readOnly = true)
-    public PatientDTO findById(Long id) {
+    public PatientResponseDTO findById(Long id) {
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        return new PatientDTO(patient);
+        return new PatientResponseDTO(patient);
     }
 
     @Transactional(readOnly = true)
-    public List<PatientDTO> findAll() {
-        List<PatientDTO> allPatients = patientRepository.findAll().stream().map(PatientDTO::new).toList();
+    public List<PatientResponseDTO> findAll() {
+        List<PatientResponseDTO> allPatients = patientRepository.findAll().stream().map(PatientResponseDTO::new).toList();
         return allPatients;
     }
 
@@ -44,20 +52,14 @@ public class PatientService {
     }
 
     @Transactional
-    public PatientDTO update(Long id, PatientDTO obj) {
+    public PatientResponseDTO update(Long id, PatientRequestDTO obj) {
         try {
             Patient patient = patientRepository.getReferenceById(id);
-            updateData(patient, obj);
+            patientMapper.updateFromDto(obj, patient);
             patientRepository.save(patient);
-            return new PatientDTO(patient);
+            return new PatientResponseDTO(patient);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
-    }
-
-    public void updateData(Patient entity, PatientDTO patientDTO) {
-        entity.setName(patientDTO.name());
-        entity.setEmail(patientDTO.email());
-        entity.setPhone(patientDTO.phone());
     }
 }
