@@ -33,7 +33,7 @@ public class SpecialityController {
     @PostMapping
     public ResponseEntity<SpecialityResponseDTO> insert(@Valid @RequestBody SpecialityRequestDTO dto) {
         SpecialityResponseDTO specialityResponseDTO = specialityService.insert(dto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(specialityResponseDTO.id()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(specialityResponseDTO.id()).toUri();
         return ResponseEntity.created(uri).body(specialityResponseDTO);
     }
 

@@ -34,7 +34,7 @@ public class DoctorController {
     @PostMapping
     public ResponseEntity<DoctorResponseDTO> insert(@Valid @RequestBody DoctorRequestDTO dto) {
         DoctorResponseDTO doctorResponseDTO = doctorService.insert(dto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(doctorResponseDTO.id()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(doctorResponseDTO.id()).toUri();
         return ResponseEntity.created(uri).body(doctorResponseDTO);
     }
 

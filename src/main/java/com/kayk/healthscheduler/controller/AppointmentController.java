@@ -32,7 +32,7 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<AppointmentResponseDTO> insert(@RequestBody AppointmentRequestDTO entity) {
         AppointmentResponseDTO appointmentResponseDTO = appointmentService.insert(entity);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(appointmentResponseDTO.id()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(appointmentResponseDTO.id()).toUri();
         return ResponseEntity.created(uri).body(appointmentResponseDTO);
     }
 

@@ -33,7 +33,7 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<PatientResponseDTO> insert(@Valid @RequestBody PatientRequestDTO entity) {
         PatientResponseDTO pacientDTO = patientService.insert(entity);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}").buildAndExpand(pacientDTO.id()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pacientDTO.id()).toUri();
         return ResponseEntity.created(uri).body(pacientDTO);
     }
 
