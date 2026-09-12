@@ -1,10 +1,10 @@
 package com.kayk.healthscheduler.service;
 
-import com.kayk.healthscheduler.DTO.DoctorRequestDTO;
-import com.kayk.healthscheduler.DTO.DoctorResponseDTO;
+import com.kayk.healthscheduler.domain.doctor.DoctorRequestDTO;
+import com.kayk.healthscheduler.domain.doctor.DoctorResponseDTO;
 import com.kayk.healthscheduler.controller.exceptions.BusinessException;
-import com.kayk.healthscheduler.entities.Doctor;
-import com.kayk.healthscheduler.entities.Speciality;
+import com.kayk.healthscheduler.domain.doctor.Doctor;
+import com.kayk.healthscheduler.domain.speciality.Speciality;
 import com.kayk.healthscheduler.mapper.DoctorMapper;
 import com.kayk.healthscheduler.repository.DoctorRepository;
 import com.kayk.healthscheduler.repository.SpecialityRepository;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class DoctorService {
@@ -34,7 +35,7 @@ public class DoctorService {
     }
 
     @Transactional(readOnly = true)
-    public DoctorResponseDTO findById(Long id) {
+    public DoctorResponseDTO findById(UUID id) {
         return doctorRepository.findById(id).stream().map(DoctorResponseDTO::new).findFirst().orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
@@ -53,7 +54,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public DoctorResponseDTO update(Long id, DoctorRequestDTO dto) {
+    public DoctorResponseDTO update(UUID id, DoctorRequestDTO dto) {
         try {
             Doctor doctor = doctorRepository.getReferenceById(id);
             doctorMapper.updateFromDto(dto, doctor);
@@ -67,7 +68,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(UUID id) {
         doctorRepository.deleteById(id);
     }
 }

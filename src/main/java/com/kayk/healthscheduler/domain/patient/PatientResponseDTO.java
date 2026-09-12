@@ -1,10 +1,10 @@
-package com.kayk.healthscheduler.DTO;
+package com.kayk.healthscheduler.domain.patient;
 
 
-import com.kayk.healthscheduler.entities.Patient;
+import java.util.UUID;
 
 public record PatientResponseDTO(
-        Long id,
+        UUID id,
         String name,
         String email,
         String phone

@@ -1,10 +1,10 @@
 package com.kayk.healthscheduler.service;
 
-import com.kayk.healthscheduler.DTO.AppointmentResponseDTO;
-import com.kayk.healthscheduler.DTO.AppointmentRequestDTO;
-import com.kayk.healthscheduler.entities.Appointment;
-import com.kayk.healthscheduler.entities.Doctor;
-import com.kayk.healthscheduler.entities.Patient;
+import com.kayk.healthscheduler.domain.appointment.AppointmentResponseDTO;
+import com.kayk.healthscheduler.domain.appointment.AppointmentRequestDTO;
+import com.kayk.healthscheduler.domain.appointment.Appointment;
+import com.kayk.healthscheduler.domain.doctor.Doctor;
+import com.kayk.healthscheduler.domain.patient.Patient;
 import com.kayk.healthscheduler.mapper.AppointmentMapper;
 import com.kayk.healthscheduler.repository.AppointmentRepository;
 import com.kayk.healthscheduler.repository.DoctorRepository;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AppointmentService {
@@ -53,7 +54,7 @@ public class AppointmentService {
     }
 
     @Transactional(readOnly = true)
-    public AppointmentResponseDTO findById(Long id) {
+    public AppointmentResponseDTO findById(UUID id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         return new AppointmentResponseDTO(appointment);
     }
@@ -65,12 +66,12 @@ public class AppointmentService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(UUID id) {
         appointmentRepository.deleteById(id);
     }
 
     @Transactional
-    public AppointmentResponseDTO update(Long id, AppointmentRequestDTO obj) {
+    public AppointmentResponseDTO update(UUID id, AppointmentRequestDTO obj) {
         try {
             Appointment appointment = appointmentRepository.getReferenceById(id);
             appointmentMapper.updateFromDto(obj, appointment);

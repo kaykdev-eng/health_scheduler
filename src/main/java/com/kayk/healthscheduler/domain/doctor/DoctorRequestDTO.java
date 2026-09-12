@@ -1,11 +1,12 @@
-package com.kayk.healthscheduler.DTO;
+package com.kayk.healthscheduler.domain.doctor;
 
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record DoctorRequestDTO(
-        Long id,
+        UUID id,
         @NotBlank(message = "Requested name")
         String name,
         @NotBlank(message = "Request CRM")
@@ -19,6 +20,6 @@ public record DoctorRequestDTO(
         @Digits(integer = 8, fraction = 2)
         BigDecimal price,
         @NotNull(message = "mandatory specialty")
-        Long specialityId
+        UUID specialityId
 ) {
 }

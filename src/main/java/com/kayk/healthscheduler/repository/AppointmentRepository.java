@@ -1,12 +1,13 @@
 package com.kayk.healthscheduler.repository;
 
-import com.kayk.healthscheduler.entities.Appointment;
+import com.kayk.healthscheduler.domain.appointment.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    boolean existsByDoctorIdAndMoment(Long id, Instant moment);
+public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
+    boolean existsByDoctorIdAndMoment(UUID id, Instant moment);
 }

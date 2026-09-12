@@ -1,9 +1,9 @@
-package com.kayk.healthscheduler.DTO;
+package com.kayk.healthscheduler.domain.speciality;
 
-import com.kayk.healthscheduler.entities.Speciality;
+import java.util.UUID;
 
 public record SpecialityResponseDTO(
-        Long id,
+        UUID id,
         String name
 ) {
     public SpecialityResponseDTO(Speciality entity) {

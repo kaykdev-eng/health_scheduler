@@ -1,7 +1,7 @@
 package com.kayk.healthscheduler.controller;
 
-import com.kayk.healthscheduler.DTO.SpecialityRequestDTO;
-import com.kayk.healthscheduler.DTO.SpecialityResponseDTO;
+import com.kayk.healthscheduler.domain.speciality.SpecialityRequestDTO;
+import com.kayk.healthscheduler.domain.speciality.SpecialityResponseDTO;
 import com.kayk.healthscheduler.service.SpecialityService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/specialties")
@@ -25,7 +26,7 @@ public class SpecialityController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<SpecialityResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<SpecialityResponseDTO> findById(@PathVariable UUID id) {
         SpecialityResponseDTO dto = specialityService.findById(id);
         return ResponseEntity.ok().body(dto);
     }
@@ -38,13 +39,13 @@ public class SpecialityController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<SpecialityResponseDTO> update(@PathVariable Long id, @RequestBody SpecialityRequestDTO dto) {
+    public ResponseEntity<SpecialityResponseDTO> update(@PathVariable UUID id, @RequestBody SpecialityRequestDTO dto) {
         SpecialityResponseDTO specialityResponseDTO = specialityService.update(id, dto);
         return ResponseEntity.ok().body(specialityResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         specialityService.delete(id);
         return ResponseEntity.noContent().build();
     }

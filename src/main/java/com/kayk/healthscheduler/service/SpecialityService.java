@@ -1,8 +1,8 @@
 package com.kayk.healthscheduler.service;
 
-import com.kayk.healthscheduler.DTO.SpecialityRequestDTO;
-import com.kayk.healthscheduler.DTO.SpecialityResponseDTO;
-import com.kayk.healthscheduler.entities.Speciality;
+import com.kayk.healthscheduler.domain.speciality.SpecialityRequestDTO;
+import com.kayk.healthscheduler.domain.speciality.SpecialityResponseDTO;
+import com.kayk.healthscheduler.domain.speciality.Speciality;
 import com.kayk.healthscheduler.mapper.SpecialityMapper;
 import com.kayk.healthscheduler.repository.SpecialityRepository;
 import com.kayk.healthscheduler.service.exception.ResourceNotFoundException;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SpecialityService {
@@ -28,7 +29,7 @@ public class SpecialityService {
     }
 
     @Transactional(readOnly = true)
-    public SpecialityResponseDTO findById(Long id) {
+    public SpecialityResponseDTO findById(UUID id) {
        SpecialityResponseDTO dto = specialityRepository.findById(id).stream().map(SpecialityResponseDTO::new).findFirst().orElseThrow(() -> new ResourceNotFoundException(id));
        return dto;
     }
@@ -41,7 +42,7 @@ public class SpecialityService {
     }
 
     @Transactional
-    public SpecialityResponseDTO update(Long id, SpecialityRequestDTO dto) {
+    public SpecialityResponseDTO update(UUID id, SpecialityRequestDTO dto) {
         try {
             Speciality entity = specialityRepository.getReferenceById(id);
             specialityMapper.updateFromDto(dto, entity);
@@ -53,7 +54,7 @@ public class SpecialityService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(UUID id) {
         specialityRepository.deleteById(id);
     }
 }

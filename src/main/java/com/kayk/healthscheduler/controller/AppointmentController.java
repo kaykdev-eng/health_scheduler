@@ -1,7 +1,7 @@
 package com.kayk.healthscheduler.controller;
 
-import com.kayk.healthscheduler.DTO.AppointmentRequestDTO;
-import com.kayk.healthscheduler.DTO.AppointmentResponseDTO;
+import com.kayk.healthscheduler.domain.appointment.AppointmentRequestDTO;
+import com.kayk.healthscheduler.domain.appointment.AppointmentResponseDTO;
 import com.kayk.healthscheduler.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/appointments")
@@ -24,7 +25,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AppointmentResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> findById(@PathVariable UUID id) {
         AppointmentResponseDTO appointmentResponseDTO = appointmentService.findById(id);
         return ResponseEntity.ok().body(appointmentResponseDTO);
     }
@@ -37,13 +38,13 @@ public class AppointmentController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<AppointmentResponseDTO> update(@PathVariable Long id, @RequestBody AppointmentRequestDTO entity) {
+    public ResponseEntity<AppointmentResponseDTO> update(@PathVariable UUID id, @RequestBody AppointmentRequestDTO entity) {
         AppointmentResponseDTO appointmentResponseDTO = appointmentService.update(id, entity);
         return ResponseEntity.ok().body(appointmentResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         appointmentService.delete(id);
         return ResponseEntity.noContent().build();
     }

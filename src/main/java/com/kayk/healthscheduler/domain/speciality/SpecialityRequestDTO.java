@@ -1,9 +1,11 @@
-package com.kayk.healthscheduler.DTO;
+package com.kayk.healthscheduler.domain.speciality;
 
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public record SpecialityRequestDTO(
-        Long id,
+        UUID id,
         @NotBlank(message = "This field cannot be left blank.")
         String name
 ) {

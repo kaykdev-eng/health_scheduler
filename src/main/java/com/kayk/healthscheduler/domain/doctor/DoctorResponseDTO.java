@@ -1,11 +1,12 @@
-package com.kayk.healthscheduler.DTO;
+package com.kayk.healthscheduler.domain.doctor;
 
-import com.kayk.healthscheduler.entities.Doctor;
+import com.kayk.healthscheduler.domain.speciality.SpecialityResponseDTO;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record DoctorResponseDTO(
-        Long id,
+        UUID id,
         String name,
         String crm,
         BigDecimal price,

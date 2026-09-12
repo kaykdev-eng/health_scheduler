@@ -1,13 +1,15 @@
-package com.kayk.healthscheduler.DTO;
+package com.kayk.healthscheduler.domain.appointment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.kayk.healthscheduler.entities.Appointment;
-import com.kayk.healthscheduler.entities.enums.AppointmentStatus;
+import com.kayk.healthscheduler.domain.doctor.DoctorResponseDTO;
+import com.kayk.healthscheduler.domain.patient.PatientResponseDTO;
+import com.kayk.healthscheduler.domain.enums.AppointmentStatus;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public record AppointmentResponseDTO(
-        Long id,
+        UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
         Instant moment,
         AppointmentStatus status,

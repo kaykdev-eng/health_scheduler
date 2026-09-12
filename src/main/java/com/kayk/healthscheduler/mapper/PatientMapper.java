@@ -1,8 +1,8 @@
 package com.kayk.healthscheduler.mapper;
 
-import com.kayk.healthscheduler.DTO.PatientRequestDTO;
-import com.kayk.healthscheduler.DTO.PatientResponseDTO;
-import com.kayk.healthscheduler.entities.Patient;
+import com.kayk.healthscheduler.domain.patient.PatientRequestDTO;
+import com.kayk.healthscheduler.domain.patient.PatientResponseDTO;
+import com.kayk.healthscheduler.domain.patient.Patient;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

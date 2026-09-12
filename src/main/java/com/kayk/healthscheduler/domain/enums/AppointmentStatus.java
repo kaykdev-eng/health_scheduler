@@ -1,4 +1,4 @@
-package com.kayk.healthscheduler.entities.enums;
+package com.kayk.healthscheduler.domain.enums;
 
 public enum AppointmentStatus {
     PENDING(1),

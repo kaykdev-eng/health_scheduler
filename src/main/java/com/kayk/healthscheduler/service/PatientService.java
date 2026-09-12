@@ -1,8 +1,8 @@
 package com.kayk.healthscheduler.service;
 
-import com.kayk.healthscheduler.DTO.PatientRequestDTO;
-import com.kayk.healthscheduler.DTO.PatientResponseDTO;
-import com.kayk.healthscheduler.entities.Patient;
+import com.kayk.healthscheduler.domain.patient.PatientRequestDTO;
+import com.kayk.healthscheduler.domain.patient.PatientResponseDTO;
+import com.kayk.healthscheduler.domain.patient.Patient;
 import com.kayk.healthscheduler.mapper.PatientMapper;
 import com.kayk.healthscheduler.repository.PatientRepository;
 import com.kayk.healthscheduler.controller.exceptions.BusinessException;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PatientService {
@@ -35,7 +36,7 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public PatientResponseDTO findById(Long id) {
+    public PatientResponseDTO findById(UUID id) {
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         return new PatientResponseDTO(patient);
     }
@@ -47,12 +48,12 @@ public class PatientService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(UUID id) {
         patientRepository.deleteById(id);
     }
 
     @Transactional
-    public PatientResponseDTO update(Long id, PatientRequestDTO obj) {
+    public PatientResponseDTO update(UUID id, PatientRequestDTO obj) {
         try {
             Patient patient = patientRepository.getReferenceById(id);
             patientMapper.updateFromDto(obj, patient);
