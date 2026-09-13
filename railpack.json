@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railpack.com/config.schema.json",
+  "steps": {
+    "build": {
+      "commands": [
+        "./mvnw clean package -DskipTests"
+      ]
+    }
+  },
+  "deploy": {
+    "startCommand": "java -jar target/*.jar"
+  }
+}
